@@ -1,12 +1,13 @@
 var Http = new XMLHttpRequest();
-var url = window.location.href;
+var url = 'http://localhost:3000/';
 var dict = {
   SET: 'set',
   GET: 'get',
   DELETE: 'delete',
   SHOW_ALL: 'showAll',
   JOIN: 'join',
-  INFO: 'info'
+  INFO: 'info',
+  PING: 'ping',
 };
 
 var set = function() {
@@ -82,7 +83,7 @@ var join = function() {
 }
 
 var info = function() {
-  reqUrl = url + dict.INFO;
+  reqUrl = url + dict.PING;
   $.ajax({
     url: reqUrl,
     type: 'post',
@@ -95,3 +96,34 @@ var info = function() {
   });
 }
 
+// var connect = function() {
+//   reqUrl = url + dict.PING;
+//   $.ajax({
+//     url: reqUrl,
+//     type: 'post',
+//     dataType: 'json',
+//     contentType: 'application/json',
+//     success: function (data) {
+//       $("#status").val("Still alive. Connected to " + url);
+//       console.log("Pinging...");
+//     },
+//     data: JSON.stringify({ host: $('#host').val() })
+//   });
+// }
+
+setInterval(function() {
+  // console.log('here..');
+  reqUrl = url + dict.PING;
+  $.ajax({
+    url: reqUrl,
+    type: 'post',
+    dataType: 'json',
+    contentType: 'application/json',
+    success: function (data) {
+      $("#status").val("Still alive. Connected to " + url);
+      console.log("Pinging...");
+    },
+    data: JSON.stringify({ host: $('#host').val() })
+  });
+  showAll();
+}, 1000);
