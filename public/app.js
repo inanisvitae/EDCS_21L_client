@@ -120,8 +120,12 @@ setInterval(function() {
     dataType: 'json',
     contentType: 'application/json',
     success: function (data) {
-      $("#status").val("Still alive. Connected to " + url);
+      $("#status").val("Server is alive. Connected to " + url);
       console.log("Pinging...");
+    },
+    error: function (request, status, error) {
+      $("#status").val("It's dead. No longer connected to " + url);
+      $("#log").val("Disconnected to the server...");
     },
     data: JSON.stringify({ host: $('#host').val() })
   });
