@@ -1,13 +1,12 @@
 var Http = new XMLHttpRequest();
-var url = 'http://localhost:3000/';
+var url = window.location.href;
 var dict = {
   SET: 'set',
   GET: 'get',
   DELETE: 'delete',
   SHOW_ALL: 'showAll',
   JOIN: 'join',
-  INFO: 'info',
-  PING: 'ping',
+  INFO: 'info'
 };
 
 var set = function() {
@@ -64,6 +63,10 @@ var showAll = function() {
       console.log(data);
       $("#log").val(JSON.stringify(data.result));
     },
+    error: function(xhr, status, error){
+      var errorMessage = 'Error to show all key value pairs';
+      alert('Error - ' + errorMessage);
+    },
     data: JSON.stringify({  })
   });
 };
@@ -77,13 +80,18 @@ var join = function() {
     contentType: 'application/json',
     success: function (data) {
       console.log(data);
+      alert('Success');
+    },
+    error: function(xhr, status, error){
+      var errorMessage = 'Please enter valid network IP to join';
+      alert('Error - ' + errorMessage);
     },
     data: JSON.stringify({ host: $('#host').val() })
   });
 }
 
 var info = function() {
-  reqUrl = url + dict.PING;
+  reqUrl = url + dict.INFO;
   $.ajax({
     url: reqUrl,
     type: 'post',
@@ -91,43 +99,13 @@ var info = function() {
     contentType: 'application/json',
     success: function (data) {
       console.log(data);
+      $("#log").val(JSON.stringify(data.result));
+    },
+    error: function(xhr, status, error){
+      var errorMessage = 'Please enter valid network IP to show info';
+      alert('Error - ' + errorMessage);
     },
     data: JSON.stringify({ host: $('#host').val() })
   });
 }
 
-// var connect = function() {
-//   reqUrl = url + dict.PING;
-//   $.ajax({
-//     url: reqUrl,
-//     type: 'post',
-//     dataType: 'json',
-//     contentType: 'application/json',
-//     success: function (data) {
-//       $("#status").val("Still alive. Connected to " + url);
-//       console.log("Pinging...");
-//     },
-//     data: JSON.stringify({ host: $('#host').val() })
-//   });
-// }
-
-setInterval(function() {
-  // console.log('here..');
-  reqUrl = url + dict.PING;
-  $.ajax({
-    url: reqUrl,
-    type: 'post',
-    dataType: 'json',
-    contentType: 'application/json',
-    success: function (data) {
-      $("#status").val("Server is alive. Connected to " + url);
-      console.log("Pinging...");
-    },
-    error: function (request, status, error) {
-      $("#status").val("It's dead. No longer connected to " + url);
-      $("#log").val("Disconnected to the server...");
-    },
-    data: JSON.stringify({ host: $('#host').val() })
-  });
-  showAll();
-}, 1000);
